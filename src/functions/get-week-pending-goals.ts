@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { db } from '../db'
-import { and, count, eq, gte, lte, sql } from 'drizzle-orm'
+import { and, count, eq, gte, lte, sql, asc } from 'drizzle-orm'
 import { goalCompletions, goals } from '../db/schema'
 
 export async function getWeekPendingGoals() {
@@ -46,6 +46,7 @@ export async function getWeekPendingGoals() {
       `.mapWith(Number),
     })
     .from(goalsCreateUpToWeek)
+    .orderBy(asc(goalsCreateUpToWeek.createdAt))
     .leftJoin(
       goalsCompletionCounts,
       eq(goalsCompletionCounts.goalId, goalsCreateUpToWeek.id)
